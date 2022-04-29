@@ -25,20 +25,25 @@ buttonAdicionar.addEventListener('click', () => {
 
 
 
-
+// todo: quebrar função em funções menores
 function appendNewListItem() {
 const newLi = document.createElement('li');
 newLi.innerText = inputTexto.value;
 
+
 newLi.addEventListener('click', (e) => {
  for (let child of listaTarefas.children) {
-   child.className = ''
-  //  todo: arrumar um jeito melhor de iterar
+   child.classList.remove('selected')
+//  todo: arrumar um jeito melhor de iterar
  }
-
-  newLi.className = 'selected';
+  newLi.classList.add('selected');
 })
 
+
+newLi.addEventListener('dblclick', (e) => {
+  if (e.target.className.includes('completed')) {e.target.classList.remove('completed')}
+  else {e.target.classList.add('completed')}
+})
 
 listaTarefas.appendChild(newLi)
 inputTexto.value = '';
