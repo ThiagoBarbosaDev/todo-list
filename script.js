@@ -16,8 +16,8 @@
 const inputTexto = document.querySelector('#texto-tarefa');
 const buttonAdicionar = document.querySelector('#criar-tarefa');
 const listaTarefas = document.querySelector('#lista-tarefas');
-const buttonApagaTudo = document.querySelector('#apaga-tudo')
-
+const buttonApagaTudo = document.querySelector('#apaga-tudo');
+const removerFinalizados = document.querySelector('#remover-finalizados');
 
 buttonAdicionar.addEventListener('click', () => {
   appendNewListItem()
@@ -60,3 +60,19 @@ function apagarTudo() {
 }
 
 apagarTudo()
+
+
+// Dúvida: Não entendo pq ele não remove todos os childs se eles estiverem um seguido do outros
+// a menos que eu coloque um 'i -= 1'
+function removeCompleted() {
+
+  removerFinalizados.addEventListener('click', () => {
+for (let i = 0; i < listaTarefas.children.length; i += 1) {
+  console.log(listaTarefas.children[i].className.includes('completed'))
+  if (listaTarefas.children[i].className.includes('completed')) {listaTarefas.removeChild(listaTarefas.children[i]); i -= 1;}
+}
+
+})
+}
+
+removeCompleted()
