@@ -16,6 +16,8 @@
 const inputTexto = document.querySelector('#texto-tarefa');
 const buttonAdicionar = document.querySelector('#criar-tarefa');
 const listaTarefas = document.querySelector('#lista-tarefas');
+const buttonApagaTudo = document.querySelector('#apaga-tudo')
+
 
 buttonAdicionar.addEventListener('click', () => {
   appendNewListItem()
@@ -48,3 +50,13 @@ newLi.addEventListener('dblclick', (e) => {
 listaTarefas.appendChild(newLi)
 inputTexto.value = '';
 }
+
+function apagarTudo() {
+  buttonApagaTudo.addEventListener('click', () => {
+    while (listaTarefas.firstChild) {
+      listaTarefas.removeChild(listaTarefas.firstChild);
+    }
+  })
+}
+
+apagarTudo()
