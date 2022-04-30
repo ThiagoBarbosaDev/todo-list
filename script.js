@@ -5,10 +5,10 @@ const buttonApagaTudo = document.querySelector('#apaga-tudo');
 const buttonRemoverFinalizados = document.querySelector('#remover-finalizados');
 const buttonSalvarTarefas = document.querySelector('#salvar-tarefas');
 const buttonMoveUp = document.querySelector('#mover-cima');
-const buttonRemoverSelecionado = document.querySelector('#remover-selecionado')
+const buttonMoveDown = document.querySelector('#mover-baixo');
+const buttonRemoverSelecionado = document.querySelector('#remover-selecionado');
 
 const listaArray = listaTarefas.children;
-
 
 buttonAdicionar.addEventListener('click', () => {
   appendNewListItem();
@@ -53,7 +53,6 @@ apagarTudo();
 function removeCompleted() {
   buttonRemoverFinalizados.addEventListener('click', () => {
     for (let i = 0; i < listaTarefas.children.length; i += 1) {
-      console.log(listaTarefas.children[i].className.includes('completed'));
       if (listaTarefas.children[i].className.includes('completed')) {
         listaTarefas.removeChild(listaTarefas.children[i]);
         i -= 1;
@@ -64,7 +63,6 @@ function removeCompleted() {
 
 removeCompleted();
 
-
 // function salvarLocalStorage() {
 // let itens = listaTarefas.children.length
 
@@ -73,48 +71,63 @@ removeCompleted();
 
 //   }
 
-
-
 //   })
 // }
 
-// function moveUp() {
-
-// buttonMoveUp.addEventListener('click', () => {
-
-// for (let i = 0; i < listaArray.length; i += 1) {
-//   const liSelected = listaArray[i].className.includes('selected')
-// console.log(listaArray)
-// console.log(liSelected)
-// let cacheInnerText = ''
-// let cacheClasses = ''
-
-// if (liSelected[i-1]) {
-// cacheInnerText = listaArray[i-0].innerText;
-// cacheClasses = listaArray[i-0].className;
-// listaArray[i-0].innerText = listaArray[i].innerText
-// listaArray[i-0].className = listaArray[i].className
-// listaArray[i].innerText = cacheInnerText 
-// listaArray[i].className = cacheClasses
-// } 
-
-
-// }
-
-// })
-// }
-
-// moveUp()
-
-
 function deleteSelected() {
-buttonRemoverSelecionado.addEventListener('click', () => {
-  
-  for (child of listaTarefas.children) {
-    if (child.className.includes('selected')) {listaTarefas.removeChild(child)}
-  }
-
-})
+  buttonRemoverSelecionado.addEventListener('click', () => {
+    for (child of listaTarefas.children) {
+      if (child.className.includes('selected')) {
+        listaTarefas.removeChild(child);
+      }
+    }
+  });
 }
 
-deleteSelected()
+deleteSelected();
+
+function moveUp() {
+  buttonMoveUp.addEventListener('click', () => {
+    for (let i = 0; i < listaArray.length; i += 1) {
+      const liSelected = listaArray[i].className.includes('selected');
+      let cacheInnerText = '';
+      let cacheClasses = '';
+
+      if (liSelected && listaArray[i - 1]) {
+        cacheInnerText = listaArray[i - 1].innerText;
+        cacheClasses = listaArray[i - 1].className;
+        listaArray[i - 1].innerText = listaArray[i].innerText;
+        listaArray[i - 1].className = listaArray[i].className;
+        listaArray[i].innerText = cacheInnerText;
+        listaArray[i].className = cacheClasses;
+        cacheInnerText = '';
+        cacheClasses = '';
+      }
+    }
+  });
+}
+
+moveUp();
+
+function moveDown() {
+  buttonMoveDown.addEventListener('click', () => {
+    for (let i = listaArray.length - 1; i >= 0; i -= 1) {
+      const liSelected = listaArray[i].className.includes('selected');
+      let cacheInnerText = '';
+      let cacheClasses = '';
+
+      if (liSelected && listaArray[i + 1]) {
+        cacheInnerText = listaArray[i + 1].innerText;
+        cacheClasses = listaArray[i + 1].className;
+        listaArray[i + 1].innerText = listaArray[i].innerText;
+        listaArray[i + 1].className = listaArray[i].className;
+        listaArray[i].innerText = cacheInnerText;
+        listaArray[i].className = cacheClasses;
+        cacheInnerText = '';
+        cacheClasses = '';
+      }
+    }
+  });
+}
+
+moveDown();
