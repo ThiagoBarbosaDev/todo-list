@@ -9,24 +9,31 @@ const buttonMoveDown = document.querySelector('#mover-baixo');
 const buttonRemoverSelecionado = document.querySelector('#remover-selecionado');
 const listaArray = listaTarefas.children;
 
-// todo: quebrar função em funções menores
-function appendNewListItem() {
-  const newLi = document.createElement('li');
-  newLi.innerText = inputTexto.value;
-  newLi.addEventListener('click', () => {
-    for (const child of listaTarefas.children) {
-      child.classList.remove('selected');
-      //  todo: arrumar um jeito melhor de iterar
-    }
-    newLi.classList.add('selected');
-  });
-  newLi.addEventListener('dblclick', (e) => {
+function addCompletedListener(newItem) {
+  newItem.addEventListener('dblclick', (e) => {
     if (e.target.className.includes('completed')) {
       e.target.classList.remove('completed');
     } else {
       e.target.classList.add('completed');
     }
   });
+}
+
+function addClickListeners(newLi) {
+  newLi.addEventListener('click', () => {
+    Array.from(listaArray).forEach((child) => {
+      child.classList.remove('selected');
+    });
+
+    newLi.classList.add('selected');
+  });
+}
+
+function appendNewListItem() {
+  const newLi = document.createElement('li');
+  newLi.innerText = inputTexto.value;
+  addClickListeners(newLi);
+  addCompletedListener(newLi);
   listaTarefas.appendChild(newLi);
   inputTexto.value = '';
 }
@@ -62,11 +69,11 @@ removeCompleted();
 
 function deleteSelected() {
   buttonRemoverSelecionado.addEventListener('click', () => {
-    for (const child of listaTarefas.children) {
+    Array.from(listaArray).forEach((child) => {
       if (child.className.includes('selected')) {
         listaTarefas.removeChild(child);
       }
-    }
+    });
   });
 }
 
@@ -140,32 +147,15 @@ function salvarLocalStorage() {
 salvarLocalStorage();
 
 function resgatarLocalStorage() {
-  //   JSON.parse(localStorage.getItem('savedTasksLocalStorage'))
   const tasksCache = JSON.parse(localStorage.getItem('savedTasksLocalStorage'));
-  // console.log(tasksCache)
 
   if (tasksCache) {
     for (let i = 0; i < tasksCache.length; i += 1) {
       const newLi = document.createElement('li');
       newLi.innerText = tasksCache[i].savedText;
       newLi.className = tasksCache[i].savedClasses;
-
-      newLi.addEventListener('click', () => {
-        for (const child of listaTarefas.children) {
-          child.classList.remove('selected');
-          //  todo: arrumar um jeito melhor de iterar
-        }
-        newLi.classList.add('selected');
-      });
-
-      newLi.addEventListener('dblclick', (e) => {
-        if (e.target.className.includes('completed')) {
-          e.target.classList.remove('completed');
-        } else {
-          e.target.classList.add('completed');
-        }
-      });
-
+      addClickListeners(newLi);
+      addCompletedListener(newLi);
       listaTarefas.appendChild(newLi);
     }
   }

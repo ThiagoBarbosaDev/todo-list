@@ -1,5 +1,5 @@
 .selected {
-  background-color: rgb(128, 128, 128);
+  background-color: gray;
   border-radius: 15px;
   padding-left: 20px;
   padding-right: 20px;
@@ -11,8 +11,6 @@
   color: black;
 }
 
-
 .completed {
-  text-decoration: line-through solid rgb(0, 0, 0);
+  text-decoration: line-through solid black;
 }
-
