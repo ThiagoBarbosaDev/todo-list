@@ -7,26 +7,19 @@ const buttonSalvarTarefas = document.querySelector('#salvar-tarefas');
 const buttonMoveUp = document.querySelector('#mover-cima');
 const buttonMoveDown = document.querySelector('#mover-baixo');
 const buttonRemoverSelecionado = document.querySelector('#remover-selecionado');
-
 const listaArray = listaTarefas.children;
-
-buttonAdicionar.addEventListener('click', () => {
-  appendNewListItem();
-});
 
 // todo: quebrar função em funções menores
 function appendNewListItem() {
   const newLi = document.createElement('li');
   newLi.innerText = inputTexto.value;
-
-  newLi.addEventListener('click', (e) => {
-    for (let child of listaTarefas.children) {
+  newLi.addEventListener('click', () => {
+    for (const child of listaTarefas.children) {
       child.classList.remove('selected');
       //  todo: arrumar um jeito melhor de iterar
     }
     newLi.classList.add('selected');
   });
-
   newLi.addEventListener('dblclick', (e) => {
     if (e.target.className.includes('completed')) {
       e.target.classList.remove('completed');
@@ -37,6 +30,10 @@ function appendNewListItem() {
   listaTarefas.appendChild(newLi);
   inputTexto.value = '';
 }
+
+buttonAdicionar.addEventListener('click', () => {
+  appendNewListItem();
+});
 
 function apagarTudo() {
   buttonApagaTudo.addEventListener('click', () => {
@@ -63,20 +60,9 @@ function removeCompleted() {
 
 removeCompleted();
 
-// function salvarLocalStorage() {
-// let itens = listaTarefas.children.length
-
-//   buttonSalvarTarefas.addEventListener('click',() => {
-//   for (let i = 0; i < itens; i += 1) {
-
-//   }
-
-//   })
-// }
-
 function deleteSelected() {
   buttonRemoverSelecionado.addEventListener('click', () => {
-    for (child of listaTarefas.children) {
+    for (const child of listaTarefas.children) {
       if (child.className.includes('selected')) {
         listaTarefas.removeChild(child);
       }
@@ -131,3 +117,58 @@ function moveDown() {
 }
 
 moveDown();
+
+function salvarLocalStorage() {
+  if (listaTarefas !== 0) {
+    buttonSalvarTarefas.addEventListener('click', () => {
+      localStorage.clear();
+      const savedTasks = [];
+      for (let i = 0; i < listaArray.length; i += 1) {
+        savedTasks.push({
+          savedText: listaArray[i].innerText,
+          savedClasses: listaArray[i].className,
+        });
+      }
+      localStorage.setItem(
+        'savedTasksLocalStorage',
+        JSON.stringify(savedTasks),
+      );
+    });
+  }
+}
+
+salvarLocalStorage();
+
+function resgatarLocalStorage() {
+  //   JSON.parse(localStorage.getItem('savedTasksLocalStorage'))
+  const tasksCache = JSON.parse(localStorage.getItem('savedTasksLocalStorage'));
+  // console.log(tasksCache)
+
+  if (tasksCache) {
+    for (let i = 0; i < tasksCache.length; i += 1) {
+      const newLi = document.createElement('li');
+      newLi.innerText = tasksCache[i].savedText;
+      newLi.className = tasksCache[i].savedClasses;
+
+      newLi.addEventListener('click', () => {
+        for (const child of listaTarefas.children) {
+          child.classList.remove('selected');
+          //  todo: arrumar um jeito melhor de iterar
+        }
+        newLi.classList.add('selected');
+      });
+
+      newLi.addEventListener('dblclick', (e) => {
+        if (e.target.className.includes('completed')) {
+          e.target.classList.remove('completed');
+        } else {
+          e.target.classList.add('completed');
+        }
+      });
+
+      listaTarefas.appendChild(newLi);
+    }
+  }
+}
+
+resgatarLocalStorage();
